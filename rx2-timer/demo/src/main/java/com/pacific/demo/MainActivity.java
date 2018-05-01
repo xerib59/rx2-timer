@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         .period(1) //default is 1
         .take(30) //default is 60
         .unit(TimeUnit.SECONDS) // default is TimeUnit.SECONDS
+            .isCountdown(false)
         .onEmit(count -> {
           if (count < 10) {
             binding.text.setText("0" + count + " s");

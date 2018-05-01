@@ -1,2 +1,2 @@
 //include ':demo', ':rx2timer'
-include ':rx2timer'
+include ':rx2timer', ':demo'

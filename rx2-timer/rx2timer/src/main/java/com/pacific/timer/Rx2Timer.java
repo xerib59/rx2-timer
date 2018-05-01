@@ -23,6 +23,7 @@ public final class Rx2Timer {
   private long resumeTake = 0l;
   private boolean isPause = false;
   private boolean isStarted = false;
+  private int valueDiff = 1;
   private Disposable disposable;
 
   private Rx2Timer(Builder builder) {
@@ -33,6 +34,8 @@ public final class Rx2Timer {
     onComplete = builder.onComplete;
     onEmit = builder.onEmit;
     onError = builder.onError;
+    valueDiff = builder.isCountdown ? 1 : -1;
+    isPause = true;
   }
 
   /**
@@ -64,8 +67,8 @@ public final class Rx2Timer {
           .map(new Function<Long, Long>() {
             @Override
             public Long apply(Long aLong) throws Exception {
-              pauseTake = aLong;
-              return take - aLong;
+              pauseTake = aLong * valueDiff;
+              return take - (aLong * valueDiff);
             }
           })
           .doOnSubscribe(new Consumer<Disposable>() {
@@ -196,6 +199,7 @@ public final class Rx2Timer {
     private Action onComplete;
     private Consumer<Long> onEmit;
     private Consumer<Throwable> onError;
+    private boolean isCountdown = false;
 
     Builder() {
     }
@@ -217,6 +221,16 @@ public final class Rx2Timer {
      */
     public Builder period(int period) {
       this.period = period;
+      return this;
+    }
+
+    /**
+     * period, default value is 1
+     *
+     * @param isCountdown period value
+     */
+    public Builder isCountdown(boolean isCountdown) {
+      this.isCountdown = isCountdown;
       return this;
     }
 
